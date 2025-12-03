@@ -1,0 +1,9 @@
+services:
+  api:
+    build:
+      dockerfile: Dockerfile
+      context: .
+    environment:
+      - "SERVER_HELLO=Hello world!"
+    ports:
+      - "8080:8080"

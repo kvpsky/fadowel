@@ -1,0 +1,25 @@
+---
+name: Build & Push (CI)
+on:
+  - push
+env:
+  repo: ghcr.io/${{ github.repository }}
+  tag: ${{ github.ref_name == 'main' && 'latest' || github.ref_name }}
+jobs:
+  build-push:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+      - name: Docker buildx setup
+        uses: docker/setup-buildx-action@v3
+      - name: Docker build
+        run: docker build -t app:latest .
+      - name: Docker push
+        run: |
+          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+          docker tag app:latest ${{ env.repo }}:${{ env.tag }}
+          docker push ${{ env.repo }}:${{ env.tag }}
