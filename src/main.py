@@ -12,7 +12,7 @@ app = FastAPI(docs_url=None, redoc_url=None, openapi_url=None)
 
 @app.get("/health-check")
 def health_check() -> Response:
-    return JSONResponse(content={"status": "ok"})
+    return JSONResponse(content={"status": "good"})
 
 
 @app.get("/hello-world")
